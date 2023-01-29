@@ -50,6 +50,8 @@ int main() {
 
         loginDataBase.push_back(data);
     }
+    
+    inFile.close();
 
     // printDataBase();
     basePasswords = modify_password_base(basePasswords);

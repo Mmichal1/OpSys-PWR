@@ -1,23 +1,33 @@
 #include "scheduler.hpp"
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     int algorithm_choice;
+    string filename;
     int chronon = 0;
+    bool end_of_file = false;
+    bool terminate = false;
+    array<ProcessData, 3> cpu_cores = {ProcessData(-1, -1, -1), ProcessData(-1, -1, -1), ProcessData(-1, -1, -1)};
+
+    queue<ProcessData> fcfs;
+    priority_queue<ProcessData, vector<ProcessData>, Compare> sjf;
+
     // cout << "Choose used algorithm:" << endl;
     // cout << "1 - FCFS, non-preemptive" << endl;
     // cin >> algorithm_choice;
 
-    // read file name here
+    while (1) {
+        cout << "Enter filename:" << '\n';
+        cin >> filename;
+        if (exists_test(filename)) {
+            break;
+        }
+        cout << "File does not exist." << '\n';
+    }
 
-    ifstream infile("sched1.in");
+    ifstream infile(filename);
     string input_line;
-    bool end_of_file = false;
-    bool terminate = false;
-    queue<ProcessData> fcfs;
-    array<ProcessData, atol(argv[1])> cpu_cores;
 
-    // cout << cpu_0.get_pid() << cpu_0.get_burst_time() << cpu_0.get_priority() << endl;
-
+    cout << "Chronon" << '\t' << "CPU0" << '\t' << "CPU1" << '\t' << "CPU2" << '\n';
     while (1) {
         if (getline(infile, input_line)) {
             istringstream iss(input_line);
@@ -30,20 +40,14 @@ int main(int argc, char* argv[]) {
 
             for (int i = 1; i < buffer.size(); i++) {
                 ProcessData process_params = ProcessData(buffer[i], buffer[i++], buffer[i++]);
-                fcfs.push(process_params);
-                // cout << "index: " << i << '\n';
-                // cout << "pid: " << process_params.get_pid() << " burst_time: " << process_params.get_burst_time() << " priority: " << process_params.get_priority() << '\n';
+                // fcfs.push(process_params);
+                sjf.push(process_params);
             }
-        } else {
+        } else
             end_of_file = true;
-        }
+        shortest_jobtime_first(sjf, cpu_cores, chronon, terminate, end_of_file);
+        // first_come_first_served(fcfs, cpu_cores, chronon, terminate, end_of_file);
 
-        // cout << chronon << " " << cpu_0.get_pid() << endl;
-
-        first_come_first_served(fcfs, cpu_cores, chronon, terminate, end_of_file);
-
-        if (terminate) {
-            break;
-        }
+        if (terminate) break;
     }
 }

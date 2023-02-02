@@ -1,10 +1,12 @@
+#include <sys/stat.h>
+
+#include <array>
 #include <fstream>
 #include <iostream>
 #include <queue>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <array>
 
 using namespace std;
 
@@ -38,7 +40,7 @@ class ProcessData {
     void set_priority(int value) {
         ProcessData::priority = value;
     };
-    
+
     int get_pid() {
         return ProcessData::pid;
     };
@@ -56,4 +58,13 @@ class ProcessData {
     }
 };
 
-void first_come_first_served(queue<ProcessData> &fcfs, array<ProcessData, 1> &cpu_cores, int &chronon, bool &terminate, bool end_of_file);
+class Compare {
+   public:
+    bool operator() (ProcessData a, ProcessData b) { return a.get_burst_time() > b.get_burst_time(); }
+};
+
+void first_come_first_served(queue<ProcessData> &fcfs, array<ProcessData, 3> &cpu_cores, int &chronon, bool &terminate, bool end_of_file);
+
+void shortest_jobtime_first(priority_queue<ProcessData, vector<ProcessData>, Compare> &sjf, array<ProcessData, 3> &cpu_cores, int &chronon, bool &terminate, bool end_of_file);
+
+bool exists_test(const string &name);

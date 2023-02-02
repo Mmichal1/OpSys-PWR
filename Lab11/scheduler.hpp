@@ -60,7 +60,12 @@ class ProcessData {
 
 class Compare {
    public:
-    bool operator() (ProcessData a, ProcessData b) { return a.get_burst_time() > b.get_burst_time(); }
+    bool operator()(ProcessData a, ProcessData b) {
+        if (a.get_burst_time() == b.get_burst_time()) {
+            return a.get_pid() > b.get_pid();
+        }
+        return a.get_burst_time() > b.get_burst_time();
+    }
 };
 
 void first_come_first_served(queue<ProcessData> &fcfs, array<ProcessData, 3> &cpu_cores, int &chronon, bool &terminate, bool end_of_file);

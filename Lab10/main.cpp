@@ -50,6 +50,8 @@ int main() {
 
         loginDataBase.push_back(data);
     }
+    
+    inFile.close();
 
     // printDataBase();
     basePasswords = modify_password_base(basePasswords);
@@ -57,19 +59,19 @@ int main() {
 
     jthread t0;
     jthread t1(password_breaker_thread_1, basePasswords);
-    // jthread t2(password_breaker_thread_2, basePasswords);
-    // jthread t3(password_breaker_thread_3, basePasswords);
-    // jthread t4(password_breaker_thread_4, basePasswords);
-    //jthread t5(password_breaker_thread_5, basePasswords);
-    //jthread t6(password_breaker_thread_6, basePasswords);
+    jthread t2(password_breaker_thread_2, basePasswords);
+    jthread t3(password_breaker_thread_3, basePasswords);
+    jthread t4(password_breaker_thread_4, basePasswords);
+    jthread t5(password_breaker_thread_5, basePasswords);
+    jthread t6(password_breaker_thread_6, basePasswords);
     jthread t_cons(consumer_thread, s_source.get_token());
 
     t1.join();
-    // t2.join();
-    // t3.join();
-    // t4.join();
-    //t5.join();
-    //t6.join();
+    t2.join();
+    t3.join();
+    t4.join();
+    t5.join();
+    t6.join();
 
     cond_var.notify_one();
     s_source.request_stop();

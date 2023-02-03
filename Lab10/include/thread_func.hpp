@@ -78,9 +78,9 @@ void password_breaker_thread_4(vector<string> basePasswords) {
 
         // 00,01, ..., 99
         for (int i = 0; i < 100; i++) {
-            sprintf(numstr1, "%02d", i);
+            sprintf(numstr1, "%d", i);
             for (int j = 0; j < 100; j++) {
-                sprintf(numstr2, "%02d", j);
+                sprintf(numstr2, "%d", j);
                 hash_and_compare(numstr1 + curr_password + numstr2);
             }
         }
@@ -101,9 +101,9 @@ void password_breaker_thread_5(vector<string> basePasswords) {
             for (int i = 0; i < 10; i++) {
                 sprintf(numstr, "%d", i);
 
-                hash_and_compare(numstr + curr_password1 + curr_password2);
-                hash_and_compare(curr_password1 + numstr + curr_password2);
-                hash_and_compare(curr_password1 + curr_password2 + numstr);
+                // hash_and_compare(numstr + curr_password1 + curr_password2);
+                // hash_and_compare(curr_password1 + numstr + curr_password2);
+                // hash_and_compare(curr_password1 + curr_password2 + numstr);
             }
 
             // 00,01, ..., 99
@@ -127,13 +127,13 @@ void password_breaker_thread_6(vector<string> basePasswords) {
     for (string curr_password : basePasswords) {
         // 0,1, ..., 9
         for (int i = 33; i <= 47; i++) {
-            hash_and_compare(curr_password + char(i));
-            hash_and_compare(char(i) + curr_password);
+            // hash_and_compare(curr_password + char(i));
+            // hash_and_compare(char(i) + curr_password);
 
             for (int j = 0; j < 10; j++) {
                 sprintf(numstr, "%d", i);
-                hash_and_compare(curr_password + char(i) + numstr);
-                hash_and_compare(curr_password + numstr + char(i));
+                // hash_and_compare(curr_password + char(i) + numstr);
+                // hash_and_compare(curr_password + numstr + char(i));
                 hash_and_compare(char(i) + numstr + curr_password);
                 hash_and_compare(numstr + char(i) + curr_password);
             }
@@ -142,6 +142,9 @@ void password_breaker_thread_6(vector<string> basePasswords) {
 }
 
 void consumer_thread(stop_token s_token) {
+
+    using namespace std::chrono_literals;
+    
     while (true) {
         unique_lock<mutex> lock(mu);
         cond_var.wait(lock);
@@ -149,7 +152,6 @@ void consumer_thread(stop_token s_token) {
         if (s_token.stop_requested()) {
             break;
         }
-
         cout << "Password found:" << endl;
         cout << "E-mail address: " << loginDataBase[found_pass_index].email_address << " Password: " << loginDataBase[found_pass_index].found_password << endl;
     }

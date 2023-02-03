@@ -1,4 +1,4 @@
-#include "include/scheduler.hpp"
+#include "scheduler.hpp"
 
 int main(int argc, char *argv[]) {
     int algorithm_choice = -1;

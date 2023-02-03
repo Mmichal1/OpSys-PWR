@@ -1,4 +1,4 @@
-#include "../include/scheduler.hpp"
+#include "scheduler.hpp"
 
 void first_come_first_served(queue<ProcessData> &fcfs, array<ProcessData, 3> &cpu_cores, bool &terminate, bool end_of_file) {
     for (int i = 0; i < cpu_cores.size(); i++) {

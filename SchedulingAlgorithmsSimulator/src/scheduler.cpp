@@ -57,12 +57,11 @@ void shortest_remaining_time(priority_queue<ProcessData, vector<ProcessData>, Co
         if (cpu_cores[i].get_pid() == -1 && !srtf.empty()) {
             cpu_cores[i] = srtf.top();
             srtf.pop();
-            buffer = srtf.top();
         }
 
         if (cpu_cores[i].get_burst_time() > buffer.get_burst_time()) {
             srtf.push(cpu_cores[i]);
-            cpu_cores[i] = buffer;
+            cpu_cores[i] = srtf.top();
             srtf.pop();
         }
 
@@ -116,12 +115,11 @@ void preemptive_priority_queue_with_fcfs(priority_queue<ProcessData, vector<Proc
         if (cpu_cores[i].get_pid() == -1 && !pq_fcfs.empty()) {
             cpu_cores[i] = pq_fcfs.top();
             pq_fcfs.pop();
-            buffer = pq_fcfs.top();
         }
 
         if (cpu_cores[i].get_priority() > buffer.get_priority()) {
             pq_fcfs.push(cpu_cores[i]);
-            cpu_cores[i] = buffer;
+            cpu_cores[i] = pq_fcfs.top();
             pq_fcfs.pop();
         }
 
@@ -146,12 +144,11 @@ void preemptive_priority_queue_with_srtf(priority_queue<ProcessData, vector<Proc
         if (cpu_cores[i].get_pid() == -1 && !pq_srtf.empty()) {
             cpu_cores[i] = pq_srtf.top();
             pq_srtf.pop();
-            buffer = pq_srtf.top();
         }
 
         if (cpu_cores[i].get_priority() > buffer.get_priority()) {
             pq_srtf.push(cpu_cores[i]);
-            cpu_cores[i] = buffer;
+            cpu_cores[i] = pq_srtf.top();
             pq_srtf.pop();
         }
 

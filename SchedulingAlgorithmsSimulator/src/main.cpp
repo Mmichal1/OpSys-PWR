@@ -9,9 +9,12 @@ int main(int argc, char *argv[]) {
     array<ProcessData, 3> cpu_cores = {ProcessData(-1, -1, -1), ProcessData(-1, -1, -1), ProcessData(-1, -1, -1)};
     array<int, 3> time_on_processor = {0, 0, 0};
 
-    queue<ProcessData> fcfs_rr;
-    priority_queue<ProcessData, vector<ProcessData>, CompareBurstTimeOrPID> sjf_srtf;
-    priority_queue<ProcessData, vector<ProcessData>, ComparePriorityOrPID> npq_pq_fcfs;
+    queue<ProcessData> fcfs;
+    queue<ProcessData> rr;
+    priority_queue<ProcessData, vector<ProcessData>, CompareBurstTimeOrPID> sjf;
+    priority_queue<ProcessData, vector<ProcessData>, CompareBurstTimeOrPID> srtf;
+    priority_queue<ProcessData, vector<ProcessData>, ComparePriorityOrPID> pq_fcfs;
+    priority_queue<ProcessData, vector<ProcessData>, ComparePriorityOrPID> npq_fcfs;
     priority_queue<ProcessData, vector<ProcessData>, ComparePriorityOrBurstTime> pq_srtf;
 
     // \e[1m and \e[0m is only for command line formatting
@@ -61,28 +64,29 @@ int main(int argc, char *argv[]) {
                 ProcessData process_params = ProcessData(buffer[i], buffer[i++], buffer[i++]);
                 switch (algorithm_choice) {
                     case 0:
-                        fcfs_rr.push(process_params);
+                        fcfs.push(process_params);
                         break;
                     case 1:
-                        sjf_srtf.push(process_params);
+                        sjf.push(process_params);
                         break;
                     case 2:
-                        sjf_srtf.push(process_params);
+                        srtf.push(process_params);
                         break;
                     case 3:
-                        fcfs_rr.push(process_params);
+                        rr.push(process_params);
                         break;
                     case 4:
-                        npq_pq_fcfs.push(process_params);
+                        pq_fcfs.push(process_params);
                         break;
                     case 5:
                         pq_srtf.push(process_params);
                         break;
                     case 6:
-                        npq_pq_fcfs.push(process_params);
+                        npq_fcfs.push(process_params);
                         break;
                 }
             }
+            buffer.clear();
         } else
             end_of_file = true;
 
@@ -90,25 +94,25 @@ int main(int argc, char *argv[]) {
         
         switch (algorithm_choice) {
             case 0:
-                first_come_first_served(fcfs_rr, cpu_cores, terminate, end_of_file);
+                first_come_first_served(fcfs, cpu_cores, terminate, end_of_file);
                 break;
             case 1:
-                shortest_remaining_time(sjf_srtf, cpu_cores, terminate, end_of_file);
+                shortest_jobtime_first(sjf, cpu_cores, terminate, end_of_file);
                 break;
             case 2:
-                shortest_jobtime_first(sjf_srtf, cpu_cores, terminate, end_of_file);
+                shortest_remaining_time(srtf, cpu_cores, terminate, end_of_file);
                 break;
             case 3:
-                round_robin(fcfs_rr, cpu_cores, time_on_processor, terminate, end_of_file);
+                round_robin(rr, cpu_cores, time_on_processor, terminate, end_of_file);
                 break;
             case 4:
-                preemptive_priority_queue_with_fcfs(npq_pq_fcfs, cpu_cores, terminate, end_of_file);
+                preemptive_priority_queue_with_fcfs(pq_fcfs, cpu_cores, terminate, end_of_file);
                 break;
             case 5:
                 preemptive_priority_queue_with_srtf(pq_srtf, cpu_cores, terminate, end_of_file);
                 break;
             case 6:
-                nonpreemptive_priority_queue_with_fcfs(npq_pq_fcfs, cpu_cores, terminate, end_of_file);
+                nonpreemptive_priority_queue_with_fcfs(npq_fcfs, cpu_cores, terminate, end_of_file);
                 break;
         }
         if (terminate) break;

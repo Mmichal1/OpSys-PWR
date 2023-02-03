@@ -1,5 +1,14 @@
 #include "scheduler.hpp"
 
+/* Every algorithm uses the same basic scheme
+ *  1. Check if cpu core is empty
+ *  2. If empty then place the next process on cpu core
+ *  3. Run process
+ *  4. Check if the process has finished (burst_time == 0)
+ *  5. Repeat for each core
+ *  6. Check conditions for termination (queue is empty, reading from the file has ended and all cores are empty)
+ */
+
 void first_come_first_served(queue<ProcessData> &fcfs, array<ProcessData, 3> &cpu_cores, bool &terminate, bool end_of_file) {
     for (int i = 0; i < cpu_cores.size(); i++) {
         if (cpu_cores[i].get_pid() == -1 && !fcfs.empty()) {

@@ -3,7 +3,7 @@
 int main(int argc, char *argv[]) {
     int algorithm_choice = -1;
     string filename;
-    int chronon = 0;
+    int chronon = 0; // Quantum of time
     bool end_of_file = false;
     bool terminate = false;
     array<ProcessData, 3> cpu_cores = {ProcessData(-1, -1, -1), ProcessData(-1, -1, -1), ProcessData(-1, -1, -1)};
@@ -50,10 +50,13 @@ int main(int argc, char *argv[]) {
             string process_info;
             vector<int> buffer;
 
+            // Split string by space and load into buffer  
             while (getline(iss, process_info, ' ')) {
                 buffer.push_back(stoi(process_info));
             }
 
+            // First element in buffer vector is always the unit of time, then the process parameters are parsed
+            // Process parameters are as follows: pid priority burst_time
             for (int i = 1; i < buffer.size(); i++) {
                 ProcessData process_params = ProcessData(buffer[i], buffer[i++], buffer[i++]);
                 switch (algorithm_choice) {

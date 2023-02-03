@@ -1,5 +1,7 @@
 #include "process_data.hpp"
 
+// Custom comparators used in std::priority_queue
+
 class CompareBurstTimeOrPID {
    public:
     bool operator()(ProcessData a, ProcessData b) {
